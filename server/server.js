@@ -2,6 +2,7 @@ const path=require('path');
 const socket=require('socket.io');
 const express =require('express');
 const http=require('http');
+const {generateMess}=require('./utils/message');
 
 const public=path.join(__dirname,'../public');
 const port=process.env.PORT||3000;
@@ -29,24 +30,12 @@ console.log('new user connected');
 //   console.log('createEmail',newEmail);   
 // });
  
-   	socket.emit('newMessage',{
-   		from:'Admin',
-   		text:'Welcome to chat app',
-   	    createdAt:new Date().getTime()
-   	});
-   	socket.broadcast.emit('newMessage',{
-   		from:'Admin',
-   		text:'New user joined',
-   		createdAt:new Date().getTime()
-   });
+   	socket.emit('newMessage',generateMess('Admin','Welcome to chat app'));
+   	socket.broadcast.emit('newMessage',generateMess('Admin','New user joined'));
    	socket.on('newCreateMessage',(mess)=>{
    	console.log('Create MESSAGE',mess);
 
-   	io.emit('newMessage',{
-   		from:mess.from,
-   		text:mess.text,
-   		createdAt:new Date().getTime()
-   	});
+   	io.emit('newMessage',generateMess(mess.from,mess.text));
    	// socket.broadcast.emit('newMessage',{
    	//     from:mess.from,
    	// 	text:mess.text,
