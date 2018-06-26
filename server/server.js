@@ -19,17 +19,22 @@ console.log('new user connected');
 // 	text:`hello`,
 // 	createAt:123
 // });
-socket.emit('newMessage',{
-	from:'Manas Gupta',
-	text:'Hey.I am on server side',
-	createdAt:632
-});
+// socket.emit('newMessage',{
+// 	from:'Manas Gupta',
+// 	text:'Hey.I am on server side',
+// 	createdAt:632
+// });
 //establishing server from client side
 // socket.on('createEmail',(newEmail)=>{
 //   console.log('createEmail',newEmail);   
 // });
  socket.on('newCreateMessage',(mess)=>{
-   	console.log('NEW MESSAGE',mess);
+   	console.log('Create MESSAGE',mess);
+   	io.emit('newMessage',{
+   		from:mess.from,
+   		text:mess.text,
+   		createdAt:new Date().getTime()
+   	});
    });
 
 socket.on('disconnect',()=>{

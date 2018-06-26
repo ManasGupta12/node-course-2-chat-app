@@ -7,11 +7,11 @@ var socket=io();// it initiates the request we are making arequest from the clie
  // 	to:'manan@example.com',
  // 	text:'Hey.bhai whatsup'
  // });
- socket.emit('newCreateMessage',{
-	to:'Manan Gupta',
-	text:'Hey.I am on client side',
-	from:'Manas Gupta'
-});
+//  socket.emit('newCreateMessage',{
+// 	to:'Manan Gupta',
+// 	text:'Hey.I am on client side',
+// 	from:'Manas Gupta'
+// });
 	});
 	socket.on('disconnect',function(){
 		console.log('disconnected from the server');
