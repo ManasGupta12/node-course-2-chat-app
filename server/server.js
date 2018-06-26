@@ -10,8 +10,27 @@ var server=http.createServer(app);
 var io=socket(server);
 
 app.use(express.static(public));
-io.on('connection',(socket)=>{
+io.on('connection',(socket)=>{       //io.on is only for connection event
 console.log('new user connected');
+
+//email from server to client.This message will be there at client side
+// socket.emit('newEmail',{
+// 	from:`manas@example.com`,
+// 	text:`hello`,
+// 	createAt:123
+// });
+socket.emit('newMessage',{
+	from:'Manas Gupta',
+	text:'Hey.I am on server side',
+	createdAt:632
+});
+//establishing server from client side
+// socket.on('createEmail',(newEmail)=>{
+//   console.log('createEmail',newEmail);   
+// });
+ socket.on('newCreateMessage',(mess)=>{
+   	console.log('NEW MESSAGE',mess);
+   });
 
 socket.on('disconnect',()=>{
 		console.log('disconnected from the server');

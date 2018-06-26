@@ -6,14 +6,8 @@
 <body>
 	<p>Welcome to chat app</p>
 <script src="/socket.io/socket.io.js" ></script>
-<script>
-	var socket=io();// it initiates the request we are making arequest from the client to server to open up web socket and keep that connection open.
-	socket.on('connect',()=>{
- console.log('connected to server');
-	});
-	socket.on('disconnect',()=>{
-		console.log('disconnected from the server');
-	})
+<script src="/js/index.js">
+	
 </script>	
 </body>
 </html>
