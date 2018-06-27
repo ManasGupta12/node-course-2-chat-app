@@ -2,7 +2,7 @@ const path=require('path');
 const socket=require('socket.io');
 const express =require('express');
 const http=require('http');
-const {generateMess}=require('./utils/message');
+const {generateMess,generateLocationMessage}=require('./utils/message');
 
 const public=path.join(__dirname,'../public');
 const port=process.env.PORT||3000;
@@ -42,6 +42,10 @@ console.log('new user connected');
    	//  	createdAt:new Date().getTime()
    	// });
    });
+   	socket.on('createLocationMessage',(coords)=>{
+ io.emit('newLocationMessage',generateLocationMessage('Admin',coords.latitude,coords.longitude));
+   	
+   	});
 
 socket.on('disconnect',()=>{
 		console.log('disconnected from the server');
