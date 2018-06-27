@@ -32,10 +32,10 @@ console.log('new user connected');
  
    	socket.emit('newMessage',generateMess('Admin','Welcome to chat app'));
    	socket.broadcast.emit('newMessage',generateMess('Admin','New user joined'));
-   	socket.on('newCreateMessage',(mess)=>{
+   	socket.on('newCreateMessage',(mess,callback)=>{
    	console.log('Create MESSAGE',mess);
-
-   	io.emit('newMessage',generateMess(mess.from,mess.text));
+    io.emit('newMessage',generateMess(mess.from,mess.text));
+   	callback('This is from Manas');
    	// socket.broadcast.emit('newMessage',{
    	//     from:mess.from,
    	// 	text:mess.text,
