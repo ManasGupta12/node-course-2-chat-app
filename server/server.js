@@ -35,7 +35,7 @@ console.log('new user connected');
    	socket.on('newCreateMessage',(mess,callback)=>{
    	console.log('Create MESSAGE',mess);
     io.emit('newMessage',generateMess(mess.from,mess.text));
-   	callback('This is from Manas');
+   	callback();
    	// socket.broadcast.emit('newMessage',{
    	//     from:mess.from,
    	// 	text:mess.text,

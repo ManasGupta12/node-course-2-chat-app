@@ -38,14 +38,15 @@ var socket=io();// it initiates the request we are making arequest from the clie
  // 	}, function (data) {
  // 	console.log('Got it.',data);
  // });
+var messagetext=jQuery('[name=Message]');
 
 jQuery('#Message-form').on('submit',function(e){
  e.preventDefault();
 
  socket.emit('newCreateMessage',{
- 	from:'User',text:jQuery('[name=Message]').val()
+ 	from:'User',text:messagetext.val(),
  },function(){
-
+ messagetext.val('');
  });
 });
 var locButton=jQuery('#send-location');
@@ -53,12 +54,16 @@ locButton.on('click',function(){
 if(!navigator.geolocation){
 	return alert('Geolocation not supported by user');
 }
+locButton.attr('disabled','disabled').text('Sending loaction .....');
+
 navigator.geolocation.getCurrentPosition( function (position) {
+	locButton.removeAttr('disabled').text('Send location');
 socket.emit('createLocationMessage',{
 	latitude:position.coords.latitude,
 	longitude:position.coords.longitude
 });
 },function(){
+	locButton.removeAttr('disabled').text('Send location');
 	alert('Unable to fetch location');
 });
 });
