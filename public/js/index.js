@@ -19,20 +19,35 @@ var socket=io();// it initiates the request we are making arequest from the clie
 	// });
    socket.on('newMessage',function(mess){
    	var formattime=moment(mess.createdAt).format('h:mm a');
-   	console.log('NEW MESSAGE',mess);
-   	var li=jQuery('<li></li>');
-   	li.text(`${mess.from} ${formattime}: ${mess.text}`);
-   	jQuery('#messages').append(li);
+   	var template=jQuery("#message-template").html();
+   	var html=Mustache.render(template,{
+   		text:mess.text,
+   		from:mess.from,
+   		createdAt:formattime
+   	});
+   	jQuery('#messages').append(html);
+   	
+   	// console.log('NEW MESSAGE',mess);
+   	// var li=jQuery('<li></li>');
+   	// li.text(`${mess.from} ${formattime}: ${mess.text}`);
+   	// jQuery('#messages').append(li);
    });
 
    socket.on('newLocationMessage',function(mess){
     var formattime=moment(mess.createdAt).format('h:mm a');
-   	var li=jQuery('<li></li>');
-   	var a=jQuery('<a target="_blank">My Current Location</a>');
-   	li.text(`${mess.from} ${formattime}: `);
-   	a.attr('href',mess.url);
-   	li.append(a);
-   	jQuery('#messages').append(li);
+    var template=jQuery("#location-message-template").html();
+    var html=Mustache.render(template,{
+   	    from:mess.from,
+   	    url:mess.url,
+   		createdAt:formattime
+   	});
+   	jQuery('#messages').append(html);
+   	// var li=jQuery('<li></li>');
+   	// var a=jQuery('<a target="_blank">My Current Location</a>');
+   	// li.text(`${mess.from} ${formattime}: `);
+   	// a.attr('href',mess.url);
+   	// li.append(a);
+   	// jQuery('#messages').append(li);
   });
  //   socket.emit('newCreateMessage',{
  // 	from:'Manan Gupta',
@@ -56,7 +71,7 @@ locButton.on('click',function(){
 if(!navigator.geolocation){
 	return alert('Geolocation not supported by user');
 }
-locButton.attr('disabled','disabled').text('Sending loaction .....');
+locButton.attr('disabled','disabled').text('Sending location .....');
 
 navigator.geolocation.getCurrentPosition( function (position) {
 	locButton.removeAttr('disabled').text('Send location');
