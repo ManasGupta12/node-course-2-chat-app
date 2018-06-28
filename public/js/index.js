@@ -18,16 +18,18 @@ var socket=io();// it initiates the request we are making arequest from the clie
 	// 	console.log('new email',email);
 	// });
    socket.on('newMessage',function(mess){
+   	var formattime=moment(mess.createdAt).format('h:mm a');
    	console.log('NEW MESSAGE',mess);
    	var li=jQuery('<li></li>');
-   	li.text(`${mess.from}: ${mess.text}`);
+   	li.text(`${mess.from} ${formattime}: ${mess.text}`);
    	jQuery('#messages').append(li);
    });
 
    socket.on('newLocationMessage',function(mess){
+    var formattime=moment(mess.createdAt).format('h:mm a');
    	var li=jQuery('<li></li>');
    	var a=jQuery('<a target="_blank">My Current Location</a>');
-   	li.text(`${mess.from}: `);
+   	li.text(`${mess.from} ${formattime}: `);
    	a.attr('href',mess.url);
    	li.append(a);
    	jQuery('#messages').append(li);
