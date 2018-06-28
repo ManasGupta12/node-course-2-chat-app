@@ -1,4 +1,19 @@
 var socket=io();// it initiates the request we are making arequest from the client to server to open up web socket and keep that connection open.
+	
+ function scrolltobottom(){
+ 	var messages=jQuery('#messages');
+ 	var newmess=messages.children('li:last-child');
+ 	var clientHeight=messages.prop('clientHeight');
+ 	var scrollTop=messages.prop('scrollTop');
+ 	var scrollHeight=messages.prop('scrollHeight');
+ 	var newmessheight=newmess.innerHeight();
+ 	var lastmessheight=newmess.prev().innerHeight();
+
+ 	if(clientHeight + scrollTop + newmessheight + lastmessheight >=scrollHeight ){
+ 		messages.scrollTop(scrollHeight);
+ 	}
+ }
+
 	socket.on('connect',function(){
  console.log('connected to server');
  
@@ -26,6 +41,7 @@ var socket=io();// it initiates the request we are making arequest from the clie
    		createdAt:formattime
    	});
    	jQuery('#messages').append(html);
+   	scrolltobottom();
    	
    	// console.log('NEW MESSAGE',mess);
    	// var li=jQuery('<li></li>');
@@ -42,6 +58,7 @@ var socket=io();// it initiates the request we are making arequest from the clie
    		createdAt:formattime
    	});
    	jQuery('#messages').append(html);
+   	scrolltobottom();
    	// var li=jQuery('<li></li>');
    	// var a=jQuery('<a target="_blank">My Current Location</a>');
    	// li.text(`${mess.from} ${formattime}: `);
