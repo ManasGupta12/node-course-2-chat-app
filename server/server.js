@@ -3,12 +3,15 @@ const socket=require('socket.io');
 const express =require('express');
 const http=require('http');
 const {generateMess,generateLocationMessage}=require('./utils/message');
+const {isRealString}=require('./utils/validator');
+const {Users}=require('./utils/users');
 
 const public=path.join(__dirname,'../public');
 const port=process.env.PORT||3000;
 var app =express();
 var server=http.createServer(app);
 var io=socket(server);
+var users=new Users();
 
 app.use(express.static(public));
 io.on('connection',(socket)=>{       //io.on is only for connection event
@@ -30,8 +33,23 @@ console.log('new user connected');
 //   console.log('createEmail',newEmail);   
 // });
  
-   	socket.emit('newMessage',generateMess('Admin','Welcome to chat app'));
-   	socket.broadcast.emit('newMessage',generateMess('Admin','New user joined'));
+   	
+   	
+    socket.on('join',(params,callback)=>{
+       if(!isRealString(params.name)|| !isRealString(params.room))
+       	{ return callback('Name and Room are required');
+   }
+   socket.join(params.room);
+   users.removeUser(socket.id);
+   users.addUser(socket.id,params.name,params.room)
+   
+   io.to(params.room).emit('updateUserList',users.getUserList(params.room));
+   socket.emit('newMessage',generateMess('Admin','Welcome to chat app'));
+  socket.broadcast.to(params.room).emit('newMessage',generateMess('Admin',`${params.name} has joined`));
+   callback();
+    });
+
+
    	socket.on('newCreateMessage',(mess,callback)=>{
    	console.log('Create MESSAGE',mess);
     io.emit('newMessage',generateMess(mess.from,mess.text));
@@ -48,7 +66,13 @@ console.log('new user connected');
    	});
 
 socket.on('disconnect',()=>{
-		console.log('disconnected from the server');
+		var user=users.removeUser(socket.id);
+
+		if(user){
+
+			io.to(user.room).emit('updateUserList',users.getUserList(user.room));
+			io.to(user.room).emit('newMessage',generateMess('Admin',`${user.name} has left`));
+		}
 	});
 });
 server.listen(port,()=>{
