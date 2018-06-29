@@ -51,9 +51,12 @@ console.log('new user connected');
 
 
    	socket.on('newCreateMessage',(mess,callback)=>{
-   	console.log('Create MESSAGE',mess);
-    io.emit('newMessage',generateMess(mess.from,mess.text));
-   	callback();
+   	var user=users.getUser(socket.id);
+
+   	if(user &&isRealString(mess.text)){
+   		io.to(user.room).emit('newMessage',generateMess(user.name,mess.text));
+   	}
+  callback();
    	// socket.broadcast.emit('newMessage',{
    	//     from:mess.from,
    	// 	text:mess.text,
@@ -61,9 +64,13 @@ console.log('new user connected');
    	// });
    });
    	socket.on('createLocationMessage',(coords)=>{
- io.emit('newLocationMessage',generateLocationMessage('Admin',coords.latitude,coords.longitude));
+   		var user=users.getUser(socket.id);
+
+   	if(user){
+ io.to(user.room).emit('newLocationMessage',generateLocationMessage(user.name,coords.latitude,coords.longitude));
    	
-   	});
+   	};
+   });
 
 socket.on('disconnect',()=>{
 		var user=users.removeUser(socket.id);

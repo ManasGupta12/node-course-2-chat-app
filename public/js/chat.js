@@ -97,7 +97,7 @@ jQuery('#Message-form').on('submit',function(e){
  e.preventDefault();
 
  socket.emit('newCreateMessage',{
- 	from:'User',text:messagetext.val(),
+ 	text:messagetext.val(),
  },function(){
  messagetext.val('');
  });
