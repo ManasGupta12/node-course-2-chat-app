@@ -13,31 +13,9 @@ var server=http.createServer(app);
 var io=socket(server);
 var users=new Users();
 
-var env=process.NODE_ENV=process.NODE_ENV||'development';
-
-const mongoose=require('mongoose');
-var  Schema=mongoose.Schema;
-
-mongoose.connect('mongodb://Manas:manas6976@ds143683.mlab.com:43683/heroku_mvgv5nsz',{
-          useNewUrlParser:true,
-          useCreateIndex:true
-});
 
 
-var db = mongoose.connection;
-var chat;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-    console.log("Connection Successful!");
 
-
-var chatschema=new Schema({
-  name:String,
-  message:String,
-  created:{type:Date,default:Date.now}
-});
-chat=mongoose.model('Message',chatschema);
-});
 
 
 app.use(express.static(public));
@@ -63,12 +41,7 @@ socket.on('join',(params,callback)=>{
    	var user=users.getUser(socket.id);
 
    	if(user &&isRealString(mess.text)){
-      var newmsg = chat({ name:user.name, message:mess.text });
- 
-    newmsg.save(function (err, book) {
-      if (err) return console.error(err);
-      console.log(newmsg.name + " saved to chatapp collection.");
-    });
+     
    		io.to(user.room).emit('newMessage',generateMess(user.name,mess.text));
    	}
   callback();
