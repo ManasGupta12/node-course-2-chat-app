@@ -13,24 +13,16 @@ var server=http.createServer(app);
 var io=socket(server);
 var users=new Users();
 
-var env=process.NODE_ENV||'development';
+var env=process.NODE_ENV=process.NODE_ENV||'development';
 
 const mongoose=require('mongoose');
 var  Schema=mongoose.Schema;
 
-if(env=='development')
-{
-  mongoose.connect('mongodb://localhost:27017/chatapp',{
+mongoose.connect('mongodb://Manas:manas6976@ds143683.mlab.com:43683/heroku_mvgv5nsz',{
           useNewUrlParser:true,
           useCreateIndex:true
 });
-}
-else{
-  mongoose.connect('mongodb://Manas:manas6976@ds143683.mlab.com:43683/heroku_mvgv5nsz',{
-          useNewUrlParser:true,
-          useCreateIndex:true
-});
-}
+
 
 var db = mongoose.connection;
 var chat;
