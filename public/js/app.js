@@ -11,7 +11,16 @@ function handleError(error) {
 }
 
 // (optional) add server code here
+      var SERVER_BASE_URL = 'https://fierce-ocean-15144.herokuapp.com';
+    fetch(SERVER_BASE_URL + '/session').then(function(res) {
+      return res.json()
+    }).then(function(res) {
+      apiKey = res.apiKey;
+      sessionId = res.sessionId;
+      token = res.token;
       initializeSession();
+    }).catch(handleError);
+  
   
 
 function initializeSession() {
